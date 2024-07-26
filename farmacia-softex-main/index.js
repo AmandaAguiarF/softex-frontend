@@ -1,11 +1,11 @@
 const prompt = require('prompt-sync')();
-const fs = require('fs');
+const fs = require('fs'); // módulo file sytem
 
 // Função para carregar o arquivo JSON
 function listaRemedios() {
   try {
-    const data = fs.readFileSync('./db.json', 'utf-8');
-    return JSON.parse(data);
+    const data = fs.readFileSync('./db.json', 'utf-8'); // a função readFileSync do módulo fs (file system) do Node.js é usada para ler o conteúdo do arquivo db.json. O parâmetro 'utf-8' indica que o conteúdo deve ser lido como uma string de texto.
+    return JSON.parse(data); //Converte a string JSON lida do arquivo em um objeto JavaScript.
   } catch (err) {
     console.error('Erro ao carregar o arquivo JSON:', err);
     return [];
@@ -15,7 +15,7 @@ function listaRemedios() {
 // Função para salvar os remédios no arquivo JSON
 function salvarRemedios() {
   try {
-    fs.writeFileSync('./db.json', JSON.stringify(remedios, null, 2), 'utf-8');
+    fs.writeFileSync('./db.json', JSON.stringify(remedios, null, 2), 'utf-8'); // utiliza o writeFileSync do módulo fs para escrever a string JSON no arquivo db.json. O JSON.stringfy converte o objeto remedios em uma string JSON
     console.log('Dados atualizados no arquivo JSON com sucesso!');
   } catch (err) {
     console.error('Erro ao salvar o arquivo JSON:', err);
@@ -82,12 +82,12 @@ function loginFuncionario() {
 // loginFuncionario();
 
 function updateMedicine() {
-  console.log('\nLista de remédios disponíveis: ');
+  console.log('Lista de remédios disponíveis: ');
   remedios.forEach((remedio, index) => {
     console.log(`${index + 1}. ${remedio.nome}`);
   });
 
-  let buscadorRemedio = prompt(`\nQual remédio você deseja alterar?`);
+  let buscadorRemedio = prompt(`Qual remédio você deseja alterar?`);
 
   for (let i = 0; i < remedios.length; i++) {
     if (buscadorRemedio.toUpperCase() == remedios[i].nome.toUpperCase()) {
@@ -95,7 +95,7 @@ function updateMedicine() {
         `1 - Nome\n2 - Preço\n3 - Categoria\n4 - Necessidade de Receita\n5 - Quantidade`
       );
       let info = Number(
-        prompt(`Qual Informação do remédio você deseja alterar? `)
+        prompt(`Qual informação do remédio você deseja alterar? `)
       );
       switch (info) {
         case 1:
@@ -110,7 +110,7 @@ function updateMedicine() {
             prompt(`Qual será o novo preço do remédio ${remedios[i].nome}? `)
           );
           remedios[i].preco = novoPreco;
-          console.log(`O Preço do remédio foi atualizado`);
+          console.log(`O preço do remédio foi atualizado`);
           break;
         case 3:
           let novaCategoria = prompt(
@@ -140,7 +140,7 @@ function updateMedicine() {
             )
           );
           remedios[i].quantidade = novaQuantidade;
-          console.log(`A Quantidade do remédio foi atualizada`);
+          console.log(`A quantidade do remédio foi atualizada`);
           break;
         default:
           console.log(`ERRO`);
@@ -278,6 +278,15 @@ if (confirmaCompra.toLowerCase() === 'sim') {
   exibirRemedios(carrinho, 'comprou');
   let totalCompra = calcularTotal(carrinho);
   console.log(`O valor total da sua compra é: R$${totalCompra}`);
+
+  // Atualizar a quantidade dos remédios no estoque
+  for (let remedio of carrinho) {
+    let remedioEstoque = remedios.find((r) => r.id === remedio.id); // A função find é utilizada para procurar um elemento em um array que satisfaça a condição
+    if (remedioEstoque) {
+      remedioEstoque.quantidade -= 1; // Reduz a quantidade do remédio em 1 unidade
+    }
+  }
+  salvarRemedios(remedios); // Salva as alterações de remedios no arquivo diretamente no JSON
 } else {
   console.log(`Compra cancelada com sucesso!`);
 }

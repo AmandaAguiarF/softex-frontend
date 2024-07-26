@@ -74,7 +74,7 @@
   {
     "id": 10,
     "nome": "AAs",
-    "preco": 20,
+    "preco": 0,
     "categoria": "anti-inflamatorio",
     "controlado": false,
     "quantidade": 20
