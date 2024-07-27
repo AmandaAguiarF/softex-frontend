@@ -1,4 +1,4 @@
-# Farmácia Softex - Farmatex
+# Farmácia Softex
 
 Projeto realizado para a disciplina de Lógica de Programação do Curso de Formação Acelerada em Front-End da Softex PE.
 
