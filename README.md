@@ -15,4 +15,4 @@ Projeto realizado para a disciplina de Lógica de Programação do Curso de Form
 - Javascript (linguagem)
 - JSON Server (biblioteca)
 - Chalk (biblioteca)
-- Prompt-Sync (módulo)
+- Prompt-Sync
