@@ -1,6 +1,6 @@
 # Farmácia Softex - Farmatex
 
-Projeto realizado para a disciplina de Lógica de Programa do Curso de Formação Acelerada em Front-End da Softex PE.
+Projeto realizado para a disciplina de Lógica de Programação do Curso de Formação Acelerada em Front-End da Softex PE.
 
 ### Requisitos do Projeto
 
