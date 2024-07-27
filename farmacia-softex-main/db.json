@@ -2,10 +2,10 @@
   {
     "id": 1,
     "nome": "Paracetamol",
-    "preco": 10,
+    "preco": 12,
     "categoria": "analgesico",
     "controlado": false,
-    "quantidade": 20
+    "quantidade": 18
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "preco": 15,
     "categoria": "analgesico",
     "controlado": false,
-    "quantidade": 20
+    "quantidade": 19
   },
   {
     "id": 3,
@@ -21,7 +21,7 @@
     "preco": 15,
     "categoria": "analgesico",
     "controlado": false,
-    "quantidade": 20
+    "quantidade": 19
   },
   {
     "id": 4,
@@ -29,7 +29,7 @@
     "preco": 10,
     "categoria": "analgesico",
     "controlado": false,
-    "quantidade": 20
+    "quantidade": 19
   },
   {
     "id": 5,
@@ -37,7 +37,7 @@
     "preco": 15,
     "categoria": "analgesico",
     "controlado": false,
-    "quantidade": 20
+    "quantidade": 19
   },
   {
     "id": 6,

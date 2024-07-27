@@ -1,4 +1,5 @@
 const prompt = require('prompt-sync')();
+const funcionarios = require('./funcionarios.json');
 const fs = require('fs'); // módulo file sytem
 
 // Função para carregar o arquivo JSON
@@ -11,75 +12,98 @@ function listaRemedios() {
     return [];
   }
 }
-
 // Função para salvar os remédios no arquivo JSON
 function salvarRemedios() {
   try {
     fs.writeFileSync('./db.json', JSON.stringify(remedios, null, 2), 'utf-8'); // utiliza o writeFileSync do módulo fs para escrever a string JSON no arquivo db.json. O JSON.stringfy converte o objeto remedios em uma string JSON
-    console.log('Dados atualizados no arquivo JSON com sucesso!');
+    console.log('');
   } catch (err) {
     console.error('Erro ao salvar o arquivo JSON:', err);
   }
 }
+console.log(`\n
+███████╗ █████╗ ██████╗ ███╗   ███╗ █████╗ ████████╗███████╗██╗  ██╗
+██╔════╝██╔══██╗██╔══██╗████╗ ████║██╔══██╗╚══██╔══╝██╔════╝╚██╗██╔╝
+█████╗  ███████║██████╔╝██╔████╔██║███████║   ██║   █████╗   ╚███╔╝ 
+██╔══╝  ██╔══██║██╔══██╗██║╚██╔╝██║██╔══██║   ██║   ██╔══╝   ██╔██╗ 
+██║     ██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║   ██║   ███████╗██╔╝ ██╗
+╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+`);
 
 // Carregar remédios do arquivo JSON
 let remedios = listaRemedios();
 
-// Array de funcionarios
-let funcionarios = [
-  {
-    id: '37541053023',
-    nome: 'Juarez José',
-    pin: '21436587',
-    email: 'juuarezjose92@gmail.com',
-    administrator: true,
-  },
-];
-
-// função criar funcionarios
-function createFuncionario() {
+function criarFuncionario() {
   console.log('Bem vindo ao sistema de cadastro de funcionario!');
   let id = prompt(
-    'Digite o cpf do funcionário(sem pontuação, apenas números): '
+    'Digite o cpf do funcionário (sem pontuação, apenas números): '
   );
   let nome = prompt('Digite o nome do funcionário: ');
   let email = prompt('Digite o email do funcionário: ');
   let pin = prompt('Peça para o funcionário inserir uma senha: ');
-  let isAdmin = prompt('Esse funcionário será administrador?(S/n) ');
+  let isAdmin = prompt('Esse funcionário será administrador?(s/n) ');
 
-  let roleAdmin = isAdmin.toLowerCase() == 's';
+  let roleAdmin = false;
+  if (isAdmin.toLowerCase() === 's') roleAdmin = true;
+  else {
+    isAdmin.toLowerCase() === 'n';
+    roleAdmin = false;
+  }
 
-  funcionarios.push({
+  let novoFuncionario = {
     id: id,
     nome: nome,
     email: email,
     pin: pin,
-    administrator: roleAdmin,
-  });
+    administrador: roleAdmin,
+  };
+
+  funcionarios.push(novoFuncionario);
+
+  console.log('Funcionário cadastrado com sucesso!');
 }
 
-// função de login do funcionario
 function loginFuncionario() {
   let loginEmail = prompt('Digite o seu e-mail: ');
   let loginPin = prompt('Digite a sua senha: ');
-  let logado = false;
+  let funcionarioEncontrado = false;
+
   for (let i = 0; i < funcionarios.length; i++) {
     if (
-      loginEmail == funcionarios[i].email &&
-      loginPin == funcionarios[i].pin
+      loginEmail === funcionarios[i].email &&
+      loginPin === funcionarios[i].pin
     ) {
-      console.log(`Bem vindo ${funcionarios[i].nome}!`);
-      logado = true;
+      funcionarioEncontrado = true;
       break;
     }
   }
-  if (!logado) {
+  if (!funcionarioEncontrado) {
     console.log('E-mail ou senha incorretos');
   }
 }
 
-// createFuncionario();
-// loginFuncionario();
+function salvarFuncionarios() {
+  //Converte a lista de funcionários para JSON
+  let dadosFuncionarios = JSON.stringify(funcionarios, null, 2);
+  // Salva os dados no arquivo funcionarios.json
+  fs.writeFileSync('funcionarios.json', dadosFuncionarios);
+}
+
+function carregarFuncionarios() {
+  try {
+    //tenta ler o arquivo JSON
+    let dadosFuncionarios = fs.readFileSync('funcionarios.json');
+    return JSON.parse(dadosFuncionarios);
+  } catch (err) {
+    // Se houver um erro ao ler o arquivo (por exemplo, arquivo não existente), retorna uma lista vazia
+    console.log('Erro ao carregar funcionários:', err);
+    return [];
+  }
+}
+criarFuncionario();
+loginFuncionario();
+salvarFuncionarios();
+carregarFuncionarios();
 
 function updateMedicine() {
   console.log('Lista de remédios disponíveis: ');
@@ -87,10 +111,10 @@ function updateMedicine() {
     console.log(`${index + 1}. ${remedio.nome}`);
   });
 
-  let buscadorRemedio = prompt(`Qual remédio você deseja alterar?`);
+  let buscadorRemedio = Number(prompt(`Qual remédio você deseja alterar?`));
 
   for (let i = 0; i < remedios.length; i++) {
-    if (buscadorRemedio.toUpperCase() == remedios[i].nome.toUpperCase()) {
+    if (buscadorRemedio == remedios[i].id) {
       console.log(
         `1 - Nome\n2 - Preço\n3 - Categoria\n4 - Necessidade de Receita\n5 - Quantidade`
       );
@@ -152,8 +176,7 @@ function updateMedicine() {
   }
 }
 
-let nomeCliente = prompt(`Olá, qual seu nome? `);
-console.log(`Olá ${nomeCliente}, estas são as categorias disponíveis:`);
+console.log(`Olá, estas são as categorias disponíveis:`);
 
 let categorias = [...new Set(remedios.map((remedio) => remedio.categoria))];
 
@@ -270,9 +293,7 @@ function calcularTotal(lista) {
 
 exibirRemedios(carrinho, 'selecionou');
 
-let confirmaCompra = prompt(
-  `${nomeCliente}, você deseja concluir sua compra? sim ou nao? `
-);
+let confirmaCompra = prompt(`Você deseja concluir sua compra? sim ou nao? `);
 if (confirmaCompra.toLowerCase() === 'sim') {
   console.log(`Obrigado pela compra! `);
   exibirRemedios(carrinho, 'comprou');
@@ -290,3 +311,12 @@ if (confirmaCompra.toLowerCase() === 'sim') {
 } else {
   console.log(`Compra cancelada com sucesso!`);
 }
+
+console.log(`\n
+███████╗ █████╗ ██████╗ ███╗   ███╗ █████╗ ████████╗███████╗██╗  ██╗
+██╔════╝██╔══██╗██╔══██╗████╗ ████║██╔══██╗╚══██╔══╝██╔════╝╚██╗██╔╝
+█████╗  ███████║██████╔╝██╔████╔██║███████║   ██║   █████╗   ╚███╔╝ 
+██╔══╝  ██╔══██║██╔══██╗██║╚██╔╝██║██╔══██║   ██║   ██╔══╝   ██╔██╗ 
+██║     ██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║   ██║   ███████╗██╔╝ ██╗
+╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+`);
